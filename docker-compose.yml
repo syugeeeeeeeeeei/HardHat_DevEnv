@@ -1,23 +1,24 @@
 services:
  # 開発用 Vite
-  vite:
+  frontend:
     image: node:20
-    container_name: vite
+    container_name: frontend
     working_dir: /app
     volumes:
       - ./vite:/app:rw
     ports:
       - "4000:4000"
-    command: ["tail","-f","/dev/null"]
     networks:
       - backend
     profiles:
       - "dev"
+    tty: true
+    stdin_open: true
 
   # 本番用 Nginx
-  web:
+  nginx:
     image: nginx:latest
-    container_name: web
+    container_name: nginx
     ports:
       - "4000:80"
     volumes:
@@ -64,6 +65,9 @@ services:
         condition: service_healthy
     networks:
       - backend
+    tty: true
+    stdin_open: true
+
 
 networks:
   backend:
